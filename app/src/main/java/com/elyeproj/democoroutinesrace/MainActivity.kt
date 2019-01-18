@@ -5,9 +5,10 @@ import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -35,16 +36,19 @@ class MainActivity : AppCompatActivity() {
     private fun startUpdate() {
         resetRun()
 
-        greenJob = launch(Android) {
-            startRunning(progressBarGreen)
-        }
+        runBlocking {
 
-        redJob = launch(Android) {
-            startRunning(progressBarRed)
-        }
+            greenJob = launch {
+                startRunning(progressBarGreen)
+            }
 
-        blueJob =launch(Android) {
-            startRunning(progressBarBlue)
+            redJob = launch {
+                startRunning(progressBarRed)
+            }
+
+            blueJob = launch {
+                startRunning(progressBarBlue)
+            }
         }
     }
 
@@ -61,7 +65,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun ClosedRange<Int>.random() =
-            Random().nextInt(endInclusive - start) +  start
+            Random().nextInt(endInclusive - start) + start
 
     private fun resetRun() {
         raceEnd = false
